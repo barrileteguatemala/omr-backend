@@ -61,7 +61,7 @@ async def convert_score(file: UploadFile = File(...)):
                 break
         
         if not xml_file:
-            raise HTTPException(500, f"Oemer no generó MusicXML. Error: {result.stderr.decode()[:500]}")
+            raise HTTPException(500, f"Oemer no generó MusicXML. Error: {result.stderr.decode()[:2000]}")
         
         with open(xml_file, 'r', encoding='utf-8') as f:
             musicxml = f.read()
