@@ -16,7 +16,7 @@ WORKDIR /app
 
 # Instalar Python deps
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir onnxruntime --force-reinstall
 
 # Pre-descargar modelos de Oemer
 RUN python -c "import oemer; print('Oemer ready')" || true
