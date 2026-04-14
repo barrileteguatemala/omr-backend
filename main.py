@@ -51,7 +51,7 @@ async def convert_score(file: UploadFile = File(...)):
         result = subprocess.run([
             'oemer', input_path,
             '--output', output_dir,
-        ], capture_output=True, timeout=120)
+        ], capture_output=True, timeout=300)
         
         # Buscar MusicXML generado
         xml_file = None
@@ -93,7 +93,7 @@ async def convert_base64(data: dict):
         result = subprocess.run([
             'oemer', input_path,
             '--output', output_dir,
-        ], capture_output=True, timeout=120)
+        ], capture_output=True, timeout=300)
         
         xml_file = None
         for fname in os.listdir(output_dir):
