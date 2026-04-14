@@ -4,6 +4,8 @@ import subprocess
 import tempfile
 import os
 import base64
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
+os.environ['ORT_PROVIDERS'] = 'CPUExecutionProvider'
 
 app = FastAPI(title="OMR Backend - AI Music Teacher")
 
