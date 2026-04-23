@@ -19,26 +19,16 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir onnxruntime --force-reinstall
 
 # Pre-descargar modelos de Oemer
-RUN python -c "import oemer; print('Oemer ready')" || true
-RUN oemer --help || true
-RUN python -c "
-import os, urllib.request
-base = '/usr/local/lib/python3.10/site-packages/oemer/checkpoints'
-os.makedirs(base + '/unet_big', exist_ok=True)
-os.makedirs(base + '/seg_net', exist_ok=True)
-files = [
-    ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model.onnx', base + '/unet_big/model.onnx'),
-    ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model_metadata.json', base + '/unet_big/metadata.json'),
-    ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model.onnx', base + '/seg_net/model.onnx'),
-    ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model_metadata.json', base + '/seg_net/metadata.json'),
-]
-for url, path in files:
-    if not os.path.exists(path):
-        print(f'Downloading {url}')
-        urllib.request.urlretrieve(url, path)
-        print(f'Saved to {path}')
-print('Models ready')
-" 
+RUN wget -q -O /tmp/1st_model.onnx https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model.onnx && \
+    wget -q -O /tmp/1st_model_metadata.json https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model_metadata.json && \
+    wget -q -O /tmp/2nd_model.onnx https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model.onnx && \
+    wget -q -O /tmp/2nd_model_metadata.json https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model_metadata.json && \
+    mkdir -p /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big && \
+    mkdir -p /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net && \
+    mv /tmp/1st_model.onnx /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big/model.onnx && \
+    mv /tmp/1st_model_metadata.json /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big/metadata.json && \
+    mv /tmp/2nd_model.onnx /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net/model.onnx && \
+    mv /tmp/2nd_model_metadata.json /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net/metadata.json
 
 COPY . .
 
