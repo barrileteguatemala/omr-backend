@@ -9,6 +9,25 @@ os.environ['ORT_PROVIDERS'] = 'CPUExecutionProvider'
 
 app = FastAPI(title="OMR Backend - AI Music Teacher")
 
+@app.on_event("startup")
+async def download_models():
+    import urllib.request
+    base = '/usr/local/lib/python3.10/site-packages/oemer/checkpoints'
+    files = [
+        ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model.onnx', base + '/unet_big/model.onnx'),
+        ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model_metadata.json', base + '/unet_big/metadata.json'),
+        ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model.onnx', base + '/seg_net/model.onnx'),
+        ('https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model_metadata.json', base + '/seg_net/metadata.json'),
+    ]
+    os.makedirs(base + '/unet_big', exist_ok=True)
+    os.makedirs(base + '/seg_net', exist_ok=True)
+    for url, path in files:
+        if not os.path.exists(path):
+            print(f'Downloading {path}...')
+            urllib.request.urlretrieve(url, path)
+            print(f'Done: {path}')
+    print('All models ready')
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
