@@ -20,6 +20,7 @@ RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir
 
 # Pre-descargar modelos de Oemer
 RUN python -c "import oemer; print('Oemer ready')" || true
+RUN python -c "from oemer.inference import get_checkpoints; get_checkpoints()" || true
 
 COPY . .
 
