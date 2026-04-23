@@ -19,16 +19,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir onnxruntime --force-reinstall
 
 # Pre-descargar modelos de Oemer
-RUN wget -q -O /tmp/1st_model.onnx https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model.onnx && \
-    wget -q -O /tmp/1st_model_metadata.json https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model_metadata.json && \
-    wget -q -O /tmp/2nd_model.onnx https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model.onnx && \
-    wget -q -O /tmp/2nd_model_metadata.json https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model_metadata.json && \
-    mkdir -p /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big && \
+RUN mkdir -p /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big && \
     mkdir -p /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net && \
-    mv /tmp/1st_model.onnx /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big/model.onnx && \
-    mv /tmp/1st_model_metadata.json /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big/metadata.json && \
-    mv /tmp/2nd_model.onnx /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net/model.onnx && \
-    mv /tmp/2nd_model_metadata.json /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net/metadata.json
+    wget -q --no-check-certificate -L -O /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big/model.onnx https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model.onnx && \
+    wget -q --no-check-certificate -L -O /usr/local/lib/python3.10/site-packages/oemer/checkpoints/unet_big/metadata.json https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model_metadata.json && \
+    wget -q --no-check-certificate -L -O /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net/model.onnx https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model.onnx && \
+    wget -q --no-check-certificate -L -O /usr/local/lib/python3.10/site-packages/oemer/checkpoints/seg_net/metadata.json https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model_metadata.json
 
 COPY . .
 
