@@ -24,7 +24,8 @@ async def download_models():
     for url, path in files:
         if not os.path.exists(path):
             print(f'Downloading {path}...')
-            urllib.request.urlretrieve(url, path)
+            import subprocess
+            subprocess.run(['wget', '-q', '-L', '--tries=3', '-O', path, url], check=True)
             print(f'Done: {path}')
     print('All models ready')
 
